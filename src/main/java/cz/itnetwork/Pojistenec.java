@@ -58,6 +58,6 @@ public class Pojistenec {
 
     @Override
     public String toString(){
-        return jmeno + "\t" +  prijmeni + "\t" + vek + "\t" + telefonniCislo + "\n";
+        return jmeno + "\t\t" +  prijmeni + "\t\t" + vek + "\t\t" + telefonniCislo ;
     }
 }

@@ -1,5 +1,6 @@
 package cz.itnetwork;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class VedeniPojistenych {
@@ -9,6 +10,9 @@ public class VedeniPojistenych {
 
 //Pojistenec(String jmeno,String prijmeni,int vek,String telefonniCislo){
 
+    public VedeniPojistenych(){
+        databaze = new Databaze();
+    }
 
     public void vytvorPojistence() {
         String jmeno;
@@ -18,21 +22,21 @@ public class VedeniPojistenych {
 
         jmeno = zadejJmenoAprijmeni("jméno");
         prijmeni = zadejJmenoAprijmeni("příjmení");
+        telefonniCislo = zadejTelefonniCislo();
+        vek=zadejVek();
 
+        databaze.pridejPojistence(jmeno,prijmeni,vek,telefonniCislo);
 
     }
 
-    public boolean kontrolaVstupu(String slovo, boolean vek) {
-        if (!vek) {
-            if (slovo.length() > 2) {
-                return true;
-            } else return false;
-        } else {
-            int pocetRoku = Integer.parseInt(slovo);
-            if (pocetRoku > 18) return true;
-            else return false;
+    public void vypisHledanePojistence(){
+        ArrayList<Pojistenec> hledaniPojistenci=databaze.najdiPojistence();
+
+        for (Pojistenec pojistenec:hledaniPojistenci             ) {
+            System.out.println(pojistenec);
         }
     }
+
 
     public boolean kontrolaZnakuVretezci(String udaj, boolean jeToCislo) {
         boolean spravneZadanyUdaj = false;
@@ -47,15 +51,16 @@ public class VedeniPojistenych {
                 }
 
             }
-        } else
+        } else {
             udaj = udaj.toUpperCase();
-        for (char znak : udaj.toCharArray()) {
-            int znakVascii = (int) znak;
-            if (znakVascii >= 65 && znakVascii <= 90) {
-                spravneZadanyUdaj = true;
-            } else {
-                spravneZadanyUdaj = false;
-                break;
+            for (char znak : udaj.toCharArray()) {
+                int znakVascii = (int) znak;
+                if (znakVascii >= 65 && znakVascii <= 90) {
+                    spravneZadanyUdaj = true;
+                } else {
+                    spravneZadanyUdaj = false;
+                    break;
+                }
             }
         }
         return spravneZadanyUdaj;
@@ -65,52 +70,84 @@ public class VedeniPojistenych {
     public String zadejJmenoAprijmeni(String udaj) {
 
         String jmeno = "";
-        boolean kontrolaUdaje = true;
-        boolean spravneZnakyVretezci = true;
+        boolean kontrolaUdaje = false;
+        boolean spravneZnakyVretezci = true; //může se později změnit na FALSE a vypsat chybu s nechtěnými znaky
 
         System.out.println("Zadejte " + udaj + " pojisteného(bez diakritiky):");
         do {
-
             jmeno = sc.nextLine();
             if (jmeno.length() > 2) { //jestli má jméno/příjmení alespon 2 znaky, proběhne kontrola, zda v textu nejsou čísla nebo jiné znaky.
                 spravneZnakyVretezci = kontrolaZnakuVretezci(jmeno, false);
-                if (spravneZnakyVretezci == false) kontrolaUdaje = false;
-                return jmeno;
+                if (spravneZnakyVretezci == true) {
+                    kontrolaUdaje = true;
+                    return jmeno;
+                }
             } else kontrolaUdaje = false;
 
-            
             if (kontrolaUdaje == false) {
-                System.out.println("Špatně zadané " + udaj + ". Musí obsahovat alespoň 3 znaky.");
-                if (!spravneZnakyVretezci)
-                    System.out.print(udaj + " nesmí obsahovat diakritiku, speciální znaky ani číslice.\n");
-                System.out.print("Zadejte prosím " + udaj + " znovu:");
+                System.out.print("Špatně zadané " + udaj + ". Musí obsahovat alespoň 3 znaky.");
+                if (!spravneZnakyVretezci) {
+                    System.out.print(udaj + " nesmí obsahovat diakritiku, speciální znaky ani číslice.");
+                    spravneZnakyVretezci = true;
+                }
+                System.out.print("\nZadejte prosím " + udaj + " znovu:");
             }
         } while (!kontrolaUdaje);
         return jmeno;
     }
 
-    public String zadejTelefonniCislo(String udaj) {
+    public int zadejVek(){
+        int vek =0;
+        System.out.print("Zadejte věk:");
+        do {
+            try {
+                vek = Integer.parseInt(sc.nextLine());
+            } catch(Exception E){
+                System.out.println("Věk musí být pouze celé číslo.");
+            }
+            if(!(vek>0 && vek<150))
+
+                System.out.print("Špatně zadaný věk. Zadej prosím celou, kladnou číslovkou znovu:");
+
+
+        } while (!(vek>0 && vek<150));
+        return (int)vek;
+    }
+
+
+    public String zadejTelefonniCislo() {
         String telefonniCislo = "";
+        String telefonniCisloBezMezer = "";
+        boolean kontrolaUdaje = false;
         boolean spravneZnakyVretezci = true;
-        boolean kontrolaUdaje = true;
         System.out.println("Zadej telefonní číslo:");
         do {
-            if (kontrolaUdaje == false) {
-                System.out.println("Telefonní číslo musí obsahovat pouze 9 číslic.");
-                if (!spravneZnakyVretezci) System.out.print("Musí obsahovat pouze číslice, žádné jiné znaky.\n");
-                System.out.println("Zadejte prosím telefonní číslo znovu:");
+            telefonniCislo = sc.nextLine();
+            for (char znak : telefonniCislo.toCharArray()) {
+                if (znak != ' ')
+                    telefonniCisloBezMezer += znak;
             }
-            telefonniCislo = sc.next();
-            telefonniCislo = telefonniCislo.trim();
 
-            if (telefonniCislo.length() == 9) {
-                spravneZnakyVretezci = kontrolaZnakuVretezci(telefonniCislo, true);
-                if (spravneZnakyVretezci ==false) kontrolaUdaje = false;
-                return telefonniCislo;
+            if (telefonniCisloBezMezer.length() == 9) {
+                spravneZnakyVretezci = kontrolaZnakuVretezci(telefonniCisloBezMezer, true);
+                if (spravneZnakyVretezci == true) {
+                    kontrolaUdaje = true;
+                    return telefonniCislo;
+                }
             } else kontrolaUdaje = false;
+
+            if (kontrolaUdaje == false) {
+                System.out.print("Telefonní číslo musí obsahovat 9 číslic.");
+                if (!spravneZnakyVretezci)
+                    System.out.print("Musí obsahovat pouze číslice, žádné jiné znaky.");
+                System.out.print("\nZadejte prosím telefonní číslo znovu:");
+                telefonniCisloBezMezer="";
+            }
         } while (!kontrolaUdaje);
         return telefonniCislo;
     }
+
+
 
 
     public void vypisMenuEvidence() {
