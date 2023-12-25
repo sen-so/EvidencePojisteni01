@@ -22,4 +22,9 @@ public class Databaze {
     return nalezene;
     }
 
+    public int velikostDatabaze(){
+        int velikost = pojistenci.size();
+        return velikost;
+    }
+
 }

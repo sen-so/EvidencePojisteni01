@@ -10,7 +10,7 @@ public class VedeniPojistenych {
 
 //Pojistenec(String jmeno,String prijmeni,int vek,String telefonniCislo){
 
-    public VedeniPojistenych(){
+    public VedeniPojistenych() {
         databaze = new Databaze();
     }
 
@@ -19,20 +19,23 @@ public class VedeniPojistenych {
         String prijmeni;
         String telefonniCislo;
         int vek;
+        int velikostDatabaze = databaze.velikostDatabaze();
 
         jmeno = zadejJmenoAprijmeni("jméno");
         prijmeni = zadejJmenoAprijmeni("příjmení");
         telefonniCislo = zadejTelefonniCislo();
-        vek=zadejVek();
+        vek = zadejVek();
 
-        databaze.pridejPojistence(jmeno,prijmeni,vek,telefonniCislo);
-
+        databaze.pridejPojistence(jmeno, prijmeni, vek, telefonniCislo);
+        if ((databaze.velikostDatabaze()) == velikostDatabaze + 1) {
+            System.out.print("Data byla ulozena.\n");
+        } else System.out.print("Neco se pokazilo, pojistenec nebyl ulozen.\n");
     }
 
-    public void vypisHledanePojistence(){
-        ArrayList<Pojistenec> hledaniPojistenci=databaze.najdiPojistence();
+    public void vypisHledanePojistence() {
+        ArrayList<Pojistenec> hledaniPojistenci = databaze.najdiPojistence();
 
-        for (Pojistenec pojistenec:hledaniPojistenci             ) {
+        for (Pojistenec pojistenec : hledaniPojistenci) {
             System.out.println(pojistenec);
         }
     }
@@ -73,7 +76,7 @@ public class VedeniPojistenych {
         boolean kontrolaUdaje = false;
         boolean spravneZnakyVretezci = true; //může se později změnit na FALSE a vypsat chybu s nechtěnými znaky
 
-        System.out.println("Zadejte " + udaj + " pojisteného(bez diakritiky):");
+        System.out.print("Zadejte " + udaj + " pojisteného(bez diakritiky):");
         do {
             jmeno = sc.nextLine();
             if (jmeno.length() > 2) { //jestli má jméno/příjmení alespon 2 znaky, proběhne kontrola, zda v textu nejsou čísla nebo jiné znaky.
@@ -96,22 +99,22 @@ public class VedeniPojistenych {
         return jmeno;
     }
 
-    public int zadejVek(){
-        int vek =0;
+    public int zadejVek() {
+        int vek = 0;
         System.out.print("Zadejte věk:");
         do {
             try {
                 vek = Integer.parseInt(sc.nextLine());
-            } catch(Exception E){
+            } catch (Exception E) {
                 System.out.println("Věk musí být pouze celé číslo.");
             }
-            if(!(vek>0 && vek<150))
+            if (!(vek > 0 && vek < 150))
 
                 System.out.print("Špatně zadaný věk. Zadej prosím celou, kladnou číslovkou znovu:");
 
 
-        } while (!(vek>0 && vek<150));
-        return (int)vek;
+        } while (!(vek > 0 && vek < 150));
+        return (int) vek;
     }
 
 
@@ -120,7 +123,7 @@ public class VedeniPojistenych {
         String telefonniCisloBezMezer = "";
         boolean kontrolaUdaje = false;
         boolean spravneZnakyVretezci = true;
-        System.out.println("Zadej telefonní číslo:");
+        System.out.print("Zadej telefonní číslo:");
         do {
             telefonniCislo = sc.nextLine();
             for (char znak : telefonniCislo.toCharArray()) {
@@ -141,13 +144,11 @@ public class VedeniPojistenych {
                 if (!spravneZnakyVretezci)
                     System.out.print("Musí obsahovat pouze číslice, žádné jiné znaky.");
                 System.out.print("\nZadejte prosím telefonní číslo znovu:");
-                telefonniCisloBezMezer="";
+                telefonniCisloBezMezer = "";
             }
         } while (!kontrolaUdaje);
         return telefonniCislo;
     }
-
-
 
 
     public void vypisMenuEvidence() {
