@@ -28,20 +28,39 @@ public class VedeniPojistenych {
 
         databaze.pridejPojistence(jmeno, prijmeni, vek, telefonniCislo);
         if ((databaze.velikostDatabaze()) == velikostDatabaze + 1) {
-            System.out.print("Data byla ulozena.\n");
+            System.out.print("Data byla ulozena.");
         } else System.out.print("Neco se pokazilo, pojistenec nebyl ulozen.\n");
     }
 
-    public void vypisHledanePojistence() {
-        ArrayList<Pojistenec> hledaniPojistenci = databaze.najdiPojistence();
+    public void vypisVsechnyPojistene() {
+        ArrayList<Pojistenec> pojistenci = databaze.najdiPojistence();
 
-        for (Pojistenec pojistenec : hledaniPojistenci) {
+        for (Pojistenec pojistenec : pojistenci) {
             System.out.println(pojistenec);
         }
     }
 
+    public void vyhledejPojistence() {
+        String jmeno;
+        String prijmeni;
+        ArrayList<Pojistenec> hledaniPojistenci = new ArrayList<>();
+        System.out.print("Zadejte jméno pojisteného: ");
+        jmeno = sc.nextLine();
+        System.out.print("2Zadejte příjmení:");
+        prijmeni = sc.nextLine();
 
-    public boolean kontrolaZnakuVretezci(String udaj, boolean jeToCislo) {
+        hledaniPojistenci = databaze.najdiPojistence(jmeno, prijmeni);
+        if (hledaniPojistenci.size() > 0) {
+            for (Pojistenec pojistenec : hledaniPojistenci) {
+                System.out.println(pojistenec);
+            }
+        } else System.out.println("Pojištěný dle daného jména a příjmení nebyl nalezen.");
+
+
+    }
+
+
+    public static boolean kontrolaZnakuVretezci(String udaj, boolean jeToCislo) {
         boolean spravneZadanyUdaj = false;
         if (jeToCislo) {
             for (char znak : udaj.toCharArray()) {
@@ -152,9 +171,9 @@ public class VedeniPojistenych {
 
 
     public void vypisMenuEvidence() {
-        System.out.println("---------------------------");
+        System.out.println("--------------------------------");
         System.out.println("Evidence pojistenych");
-        System.out.println("---------------------------");
+        System.out.println("--------------------------------");
         System.out.println();
         System.out.println("Vyberte si akci:");
         System.out.println("1 – Pridat nového pojisteného ");
@@ -164,4 +183,32 @@ public class VedeniPojistenych {
     }
 
 
+    public void evidence() {
+        String volbaAkce = "";
+        vypisMenuEvidence();
+        while (!volbaAkce.equals("4")) {
+            volbaAkce = sc.nextLine();
+            switch (volbaAkce) {
+                case "1":
+                    vytvorPojistence();
+                    System.out.print(" Pokracujte libovolnou klávesou... ");
+                    break;
+                case "2":
+                    vypisVsechnyPojistene();
+                    System.out.print(" Pokracujte libovolnou klávesou... ");
+                    break;
+                case "3":
+                    vyhledejPojistence();
+                    System.out.print(" Pokracujte libovolnou klávesou... ");
+                    //vyhledaní dle jmena a prijmeni
+                    break;
+                case "4":
+                    break;
+                default:
+                    System.out.println("Neplatná akce, stiskněte libovolnou klávesu a opakujte akci znovu.");
+                    break;
+            }
+
+        }
+    }
 }
