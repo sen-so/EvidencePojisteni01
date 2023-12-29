@@ -7,8 +7,10 @@ public class Databaze implements Comparable {
 
     private ArrayList<Pojistenec> pojistenci;
 
-    public Databaze() {
+    public Databaze()
+    {
         pojistenci = new ArrayList<>();
+
     }
 
     public void pridejPojistence(String jmeno, String prijmeni, int vek, String telefonniCislo) {
@@ -20,8 +22,9 @@ public class Databaze implements Comparable {
         for (Pojistenec pojistenec : pojistenci) {
             nalezene.add(pojistenec);
         }
-    return nalezene;
+        return nalezene;
     }
+
     public ArrayList<Pojistenec> najdiPojistence(String jmeno, String prijmeni) {
         ArrayList<Pojistenec> nalezene = new ArrayList<>();
         for (Pojistenec pojistenec : pojistenci) {
@@ -32,7 +35,7 @@ public class Databaze implements Comparable {
         return nalezene;
     }
 
-    public int velikostDatabaze(){
+    public int velikostDatabaze() {
         int velikost = pojistenci.size();
         return velikost;
     }
@@ -41,4 +44,14 @@ public class Databaze implements Comparable {
     public int compareTo(Object o) {
         return 0;
     }
+
+    public void vypisVsechnyPojistene() {
+        if (pojistenci.size() > 0) {
+            for (Pojistenec pojistenec : pojistenci) {
+                System.out.println(pojistenec);
+            }
+        } else System.out.println("Seznam pojištěnců je prázdný.");
+    }
+
+
 }

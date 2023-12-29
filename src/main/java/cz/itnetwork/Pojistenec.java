@@ -23,33 +23,20 @@ public class Pojistenec {
         return jmeno;
     }
 
-    public void setJmeno(String jmeno) {
-        this.jmeno = jmeno;
-    }
 
     public String getPrijmeni() {
         return prijmeni;
-    }
-
-    public void setPrijmeni(String prijmeni) {
-        this.prijmeni = prijmeni;
     }
 
     public int getVek() {
         return vek;
     }
 
-    public void setVek(int vek) {
-        this.vek = vek;
-    }
 
     public String getTelefonniCislo() {
         return telefonniCislo;
     }
 
-    public void setTelefonniCislo(String telefonniCislo) {
-        this.telefonniCislo = telefonniCislo;
-    }
 
     public int getId() {
         return id;
